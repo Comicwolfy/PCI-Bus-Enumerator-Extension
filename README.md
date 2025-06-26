@@ -2,50 +2,50 @@
 ## ESSENTIAL FOR WORKING ON REAL HARDWARE!!
 ## You WILL need this for bare-metal in any capacity!
 
-PCI Bus Enumerator Extension for Core-Kernel: Formal Documentation
+PCI Bus Enumerator Extension for Core-Kernel: A Friendly Guide
 
-This document delineates the operational parameters and integration protocols pertaining to the PCI Bus Enumerator Extension, a constituent module within the Core-Kernel architecture.
-Introduction (Overview)
+This document is all about the PCI Bus Enumerator Extension. It's a key part of our Core-Kernel!
+Getting Started (Overview)
 
-The Peripheral Component Interconnect (PCI) Bus Enumerator constitutes an indispensable driver within the architectural framework of any contemporary operating system. Its primary function involves the dynamic ascertainment and interrogation of hardware devices interfaced via the PCI bus. In contrast to legacy interfaces, which are characterized by fixed address assignments, PCI devices necessitate a systematic scanning procedure for their identification and subsequent configuration.
+So, the PCI Bus Enumerator is a really important bit of software in any modern operating system. Its main job is to find and check out all the hardware devices connected through the PCI bus. Unlike older connections, where everything had a fixed spot, PCI devices need to be actively scanned for so your computer can find them and set them up.
 
-The implementation of this functionality is deemed CRITICAL FOR THE OPERATION UPON PHYSICAL HARDWARE PLATFORMS. Its presence is a requisite for the development of drivers applicable to a vast array of prevalent peripheral components, encompassing, but not limited to, advanced network interfaces, graphical processing units, Universal Serial Bus controllers, and mass storage controllers. For any low-level, bare-metal development endeavor, the capacity to identify and interact with PCI hardware is fundamentally imperative.
-Functional Modalities (Functionality)
+Getting this part working is SUPER IMPORTANT IF YOU EVER PLAN TO USE REAL COMPUTER HARDWARE. You'll absolutely need this for any low-level programming. It's the first step to being able to find and talk to all sorts of common computer parts, like advanced network cards, graphics cards, USB controllers, and even hard drive controllers. For anyone getting into bare-metal development, being able to identify and use PCI hardware is truly fundamental.
+What It Actually Does (Functionality)
 
-The PCI Bus Enumerator extension provides the following principal functional modalities:
+The PCI Bus Enumerator extension helps out with a few main things:
 
-    Bus and Device Discovery: The system systematically traverses the range of potential PCI bus identifiers (0x00 to 0xFF) and device slot identifiers (0x00 to 0x1F) for the purpose of identifying active PCI devices resident within the computing apparatus.
+    Finding Devices: It systematically goes through all the possible PCI "bus numbers" (from 0 to 255) and "device slot numbers" (0 to 31) to pinpoint which PCI devices are actually plugged into your computer.
 
-    Multi-Function Device Resolution: Upon the detection of a given device, an assessment is conducted to ascertain its configuration as either a single-function or multi-function entity. In instances of multi-functionality, all eight potential functions (0x00 to 0x07) associated with the device are enumerated.
+    Handling Multi-Function Devices: When it finds a device, it checks if it's a "single-function" device or a "multi-function" one (that's when one physical piece of hardware can do several different things). If it's multi-function, the extension will list all eight possible functions (0 to 7) that the device offers.
 
-    Configuration Space Interrogation: For each identified PCI function, critical configuration data is retrieved from its dedicated PCI Configuration Space registers. This information comprises, but is not limited to:
+    Reading Device Info: For each PCI function it finds, it pulls out crucial setup details from a special area called the "PCI Configuration Space." This info includes:
 
-        Vendor Identification (Vendor ID): An identifier specifying the manufacturer of the device.
+        Vendor ID: This tells you who made the device.
 
-        Device Identification (Device ID): A distinct identifier particularizing the device model from its respective vendor.
+        Device ID: This identifies the specific model of the device from that manufacturer.
 
-        Class Code: A categorization delineating the general functional purpose of the device (e.g., Network Controller, Display Controller).
+        Class Code: This puts the device into a general category (like "Network Card" or "Graphics Card").
 
-        Subclass Code: A refined categorization further specifying the device's function (e.g., Ethernet Controller, VGA Compatible Controller).
+        Subclass Code: This narrows down the category even more (like "Ethernet Controller" or "VGA Compatible Controller").
 
-        Programming Interface (ProgIF): An indicator specifying the register-level programming interface utilized by the device.
+        Programming Interface (ProgIF): This tells you how to program or control the device.
 
-        Header Type: A designator indicating the structural layout of the device's configuration space (e.g., a standard device, a PCI-to-PCI bridge).
+        Header Type: This shows the layout of the device's setup information (like if it's a standard device or a PCI-to-PCI bridge).
 
-    Basic Device Delineation: The collected information, comprising the bus, slot, function identifiers, and the discovered Vendor/Device/Class/Subclass codes, is outputted to the console. This immediate presentation of data serves as a critical diagnostic aid for developers in verifying hardware presence and characteristics within either an emulated (QEMU) or physical operational environment.
+    Showing You What's There: All the information it collects—like the bus, slot, and function numbers, plus the Vendor/Device/Class/Subclass codes—gets printed to your screen. This is incredibly helpful for developers to confirm what hardware is recognized, whether they're using a virtual machine (like QEMU) or a real computer.
 
-Ancillary Consideration: The current iteration of the enumerator is primarily restricted to the examination of Bus 0. In advanced PCI topologies, prevalent in both physical hardware and sophisticated virtual machine environments, devices may reside on secondary buses interconnected via PCI-to-PCI bridge components. A comprehensive PCI enumerator would typically incorporate recursive scanning mechanisms to traverse these bridges and effectuate the discovery of all devices throughout the entire PCI topology. The incorporation of this recursive capability is a designated future enhancement.
-Command Line Interface (Commands)
+Just a thought: Right now, this part of the code mainly looks at "Bus 0." In more complex computer setups (which are common in real computers and some virtual machines), devices can be on other "secondary buses" that are connected through "PCI-to-PCI bridges." A complete PCI tool would usually go through these bridges to find all devices across the entire PCI system. Adding this deeper scanning is something we're planning for the future!
+What Commands You Can Use
 
-This extension registers a singular, fundamental command for direct user interaction via the kernel's command-line interface:
+This extension adds just one main command for you to use in the kernel's command line:
 
     pci_scan
 
-        Description: This command initiates a comprehensive scan of the PCI bus. Subsequent to the scan, details of all detected devices and their essential configuration data are displayed on the terminal.
+        What it does: This command kicks off a full scan of the PCI bus. After it's done, you'll see all the details about the devices it found printed right on your screen.
 
-        Usage Protocol: The command is invoked by typing pci_scan.
+        How to use it: Just type pci_scan. It's that simple!
 
-        Illustrative Output:
+        What it might look like:
 
         PCI: Scanning bus...
         PCI Device: Bus 0, Slot 0, Func 0
@@ -60,34 +60,40 @@ This extension registers a singular, fundamental command for direct user interac
           Class: 0x02, Subclass: 0x00, ProgIF: 0x00
         PCI: Scan complete (Note: Only Bus 0 scanned).
 
-        (It is to be understood that the actual output will be contingent upon the specific hardware configuration detected within the operational environment of the Core-Kernel.)
 
-Integration Directives (Integration)
 
-To effectuate the integration of the PCI Bus Enumerator Extension into a Core-Kernel build, the following directives shall be observed:
+    (Just a heads-up, the exact stuff you see will depend on the specific hardware, whether it's a virtual machine or a real computer, where you're running Core-Kernel.)
 
-    Extension Source File Placement:
+How to Hook It Up (Integration)
 
-        The pci_extension.c source file shall be positioned within the kernel's src/extensions/ directory.
+To get the PCI Bus Enumerator Extension working in your Core-Kernel, just follow these steps:
 
-    Makefile Amendment:
+    Get the Source File:
 
-        The Makefile, situated in the root directory of the Core-Kernel project, shall be edited.
+        You'll need the pci_extension.c source file.
 
-        The C_SOURCES variable, which enumerates all C files designated for compilation, shall be appended with the path to the newly introduced extension's source file.
+    Put It in Place:
 
-    # Exemplary snippet from Makefile
-    C_SOURCES += src/extensions/pci_extension.c # This line is to be appended
+        Take the pci_extension.c file and put it in your kernel's src/extensions/ folder.
 
-    Shared Utility Functions (Mandatory Recommendation):
-    The pci_extension.c module employs auxiliary functions (uint16_to_hex_str, uint8_to_hex_str) for the conversion of numerical values into hexadecimal string representations. For the purposes of modularity, maintainability, and reusability across the kernel (given that analogous functionalities are likely to be required by other driver modules), it is stringently advised that these functions be:
+    Update the Makefile:
 
-        Declared: Within the includes/base_kernel.h header file.
+        Open up the Makefile (it's in your Core-Kernel project's main folder).
 
-        Defined: Within a distinct, common utility source file (e.g., src/utils.c).
+        Find the C_SOURCES list (that's where all the C files that get compiled are listed) and add the path to your new extension's file to it.
 
-        Included: The aforementioned src/utils.c file must also be incorporated into the C_SOURCES list of the Makefile.
+    # Here's an example from your Makefile
+    C_SOURCES += src/extensions/pci_extension.c # Just add this line!
 
-        Refinement: Upon the establishment of these globally accessible utility functions, all local or static definitions of uint16_to_hex_str and uint8_to_hex_str within pci_extension.c (and any other modules, such as the network driver, that may contain redundant implementations) shall be expunged. This ensures a singular point of definition and consistent usage across the kernel.
+    Shared Helper Functions (Super Important!):
+    The pci_extension.c code uses some helper functions (uint16_to_hex_str, uint8_to_hex_str) to change numbers into those hex strings. To keep things nice and tidy (and because other parts of your kernel or other drivers will probably need these same functions), it's a really smart idea to:
 
-Subsequent to the adherence to these integration protocols and the successful recompilation of the kernel, the pci_scan command shall become accessible within the command-line interface of the Core-Kernel.
+        Declare Them: In your includes/base_kernel.h file.
+
+        Define Them: In a separate, common utility file (like src/utils.c).
+
+        Include That File: Make sure you add that new src/utils.c file to your Makefile's C_SOURCES list too.
+
+        Clean Up: Once you've set up these shared helper functions, you should remove any local or static versions of uint16_to_hex_str and uint8_to_hex_str from pci_extension.c (and any other modules, like the network driver, that might have them). This makes sure everyone uses the same, central version, which is much better!
+
+After you follow these steps and rebuild your kernel successfully, the pci_scan command will be ready to use right in your Core-Kernel's command line!
