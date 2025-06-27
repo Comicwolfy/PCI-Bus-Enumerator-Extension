@@ -4,13 +4,13 @@
 
 PCI Bus Enumerator Extension for Core-Kernel: A Friendly Guide
 
-This document is all about the PCI Bus Enumerator Extension. It's a key part of our Core-Kernel!
+This document is all about the PCI Bus Enumerator Extension. It's a needed part for running Core-Kernel on bare-metal.
 Getting Started (Overview)
 
-So, the PCI Bus Enumerator is a really important bit of software in any modern operating system. Its main job is to find and check out all the hardware devices connected through the PCI bus. Unlike older connections, where everything had a fixed spot, PCI devices need to be actively scanned for so your computer can find them and set them up.
+The PCI Bus Enumerator is a really important bit of software in any modern operating system. Its main job is to find and check out all the hardware devices connected through the PCI bus. Unlike older connections, where everything had a fixed spot, PCI devices need to be actively scanned for so your computer can find them and set them up.
 
-Getting this part working is SUPER IMPORTANT IF YOU EVER PLAN TO USE REAL COMPUTER HARDWARE. You'll absolutely need this for any low-level programming. It's the first step to being able to find and talk to all sorts of common computer parts, like advanced network cards, graphics cards, USB controllers, and even hard drive controllers. For anyone getting into bare-metal development, being able to identify and use PCI hardware is truly fundamental.
-What It Actually Does (Functionality)
+Getting this part working is SUPER IMPORTANT IF YOU EVER PLAN TO USE REAL COMPUTER HARDWARE.
+### What It Actually Does (Functionality)
 
 The PCI Bus Enumerator extension helps out with a few main things:
 
@@ -34,7 +34,7 @@ The PCI Bus Enumerator extension helps out with a few main things:
 
     Showing You What's There: All the information it collects—like the bus, slot, and function numbers, plus the Vendor/Device/Class/Subclass codes—gets printed to your screen. This is incredibly helpful for developers to confirm what hardware is recognized, whether they're using a virtual machine (like QEMU) or a real computer.
 
-Just a thought: Right now, this part of the code mainly looks at "Bus 0." In more complex computer setups (which are common in real computers and some virtual machines), devices can be on other "secondary buses" that are connected through "PCI-to-PCI bridges." A complete PCI tool would usually go through these bridges to find all devices across the entire PCI system. Adding this deeper scanning is something we're planning for the future!
+Just a thought: Right now, this part of the code mainly looks at "Bus 0." In more complex computer setups (which are common in real computers and some virtual machines), devices can be on other "secondary buses" that are connected through "PCI-to-PCI bridges." A complete PCI tool would usually go through these bridges to find all devices across the entire PCI system. Adding this deeper scanning is something im planning for the future.
 What Commands You Can Use
 
 This extension adds just one main command for you to use in the kernel's command line:
@@ -66,7 +66,7 @@ This extension adds just one main command for you to use in the kernel's command
 
 How to Hook It Up (Integration)
 
-To get the PCI Bus Enumerator Extension working in your Core-Kernel, just follow these steps:
+To get the PCI Bus Enumerator Extension working in Core-Kernel, just follow these steps:
 
     Get the Source File:
 
